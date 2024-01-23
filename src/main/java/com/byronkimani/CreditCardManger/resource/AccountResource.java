@@ -42,31 +42,28 @@ public class AccountResource {
                 .statusCode(CREATED.value())
                 .build());
     }
-//    @GetMapping
-//    public ResponseEntity<HttpResponse> getAllAccounts() {
-//        return ResponseEntity.ok(HttpResponse.builder()
-//                .timeStamp(now().toString())
-//                .data(of("result", accountService.getAllAccounts()))
-//                .message("Accounts successfully retrieved")
-//                .httpStatus(OK)
-//                .statusCode(OK.value())
-//                .build());
-//    }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<HttpResponse> getAccount(@PathVariable("userId") Long id) {
-//        TODO:
+    public ResponseEntity<HttpResponse> getAccountsByUserId(@PathVariable("userId") Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+
         return ResponseEntity.ok(HttpResponse.builder()
                 .timeStamp(now().toString())
-                .data(of("result", accountService.getAccountById(id)))
+                .data(of("result", user.getAccounts()))
                 .message("Account successfully retrieved")
                 .httpStatus(OK)
                 .statusCode(OK.value())
                 .build());
     }
 
-    @PutMapping
-    public ResponseEntity<HttpResponse> updateAccount(@RequestBody Account account) {
+    @PutMapping("/{id}")
+    public ResponseEntity<HttpResponse> updateAccount(@PathVariable("id") Long id,@RequestBody Account account) {
+
+        account.setId(id);
+
         accountService.updateAccount(account);
 
         return ResponseEntity.ok(HttpResponse.builder()

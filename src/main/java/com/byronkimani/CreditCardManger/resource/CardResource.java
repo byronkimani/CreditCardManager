@@ -26,8 +26,8 @@ public class CardResource {
     private final CardService cardService;
     private final AccountRepository accountRepository;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<HttpResponse> createCard(@PathVariable("id") Long accountId,@RequestBody Card card) {
+    @PostMapping("/{accountId}")
+    public ResponseEntity<HttpResponse> createCard(@PathVariable("accountId") Long accountId,@RequestBody Card card) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
 
@@ -42,30 +42,25 @@ public class CardResource {
                 .build());
     }
 
-//    @GetMapping
-//    public ResponseEntity<HttpResponse> getAllCards() {
-//        return ResponseEntity.ok(HttpResponse.builder()
-//                .timeStamp(now().toString())
-//                .data(of("result", cardService.getAllCards()))
-//                .message("Cards successfully retrieved")
-//                .httpStatus(OK)
-//                .statusCode(OK.value())
-//                .build());
-//    }
+    @GetMapping("/{accountId}")
+    public ResponseEntity<HttpResponse> getAllCardsByAccountId(@PathVariable("accountId") Long accountId) {
 
-    @GetMapping
-    public ResponseEntity<HttpResponse> getCard(@PathVariable("id") Long id) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
+
+
         return ResponseEntity.ok(HttpResponse.builder()
                 .timeStamp(now().toString())
-                .data(of("result", cardService.getCardById(id)))
-                .message("Card successfully retrieved")
+                .data(of("result", account.getCards()))
+                .message("Cards successfully retrieved")
                 .httpStatus(OK)
                 .statusCode(OK.value())
                 .build());
     }
 
-    @PutMapping
-    public ResponseEntity<HttpResponse> updateCard(@RequestBody Card card) {
+    @PutMapping("/{id}")
+    public ResponseEntity<HttpResponse> updateCard(@PathVariable Long id , @RequestBody Card card) {
+        card.setId(id);
         cardService.updateCard(card);
 
         return ResponseEntity.ok(HttpResponse.builder()
@@ -76,7 +71,7 @@ public class CardResource {
                 .build());
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpResponse> deleteCard(@PathVariable("id") Long id) {
         return ResponseEntity.ok(HttpResponse.builder()
                 .timeStamp(now().toString())

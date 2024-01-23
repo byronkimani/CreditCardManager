@@ -8,8 +8,6 @@ import java.util.List;
 public interface CardService {
     Card createCard(Card card);
 
-    //    Get all Cards
-    List<Card> getAllCards();
     Card getCardById(Long id);
 
     //    Update Card

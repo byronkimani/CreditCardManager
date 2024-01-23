@@ -1,13 +1,46 @@
 package com.byronkimani.CreditCardManger;
 
+import com.byronkimani.CreditCardManger.model.User;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ApplicationTests {
+	private static RestTemplate restTemplate;
+
+	@Autowired
+	private TestH2UserRepository h2Repository;
+
+	@LocalServerPort
+	private int port;
+	private String baseUrl = "http://localhost";
+
+	@BeforeAll
+	public static void init() {
+		restTemplate = new RestTemplate();
+	}
+
+	@BeforeEach
+	public void setUp() {
+		baseUrl = baseUrl.concat(":").concat(String.valueOf(port)).concat("/users");
+	}
 
 	@Test
-	void contextLoads() {
+	public void testCreateUser() {
+
+		User testUser1 = new User(1L, "testName","123456", null);
+
+		User response = restTemplate.postForObject(baseUrl, testUser1, User.class);
+		assertEquals("testName", response.getName());
+		assertEquals(1, h2Repository.findAll().size());
 	}
 
 }

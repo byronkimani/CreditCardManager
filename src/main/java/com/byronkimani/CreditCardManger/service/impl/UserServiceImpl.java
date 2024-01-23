@@ -18,11 +18,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
 
-
-        //        Check if user password is strong
-        if (!(user.getPassword().length() > 2))
-            throw new ApiException("Password must be at least 3 characters. Please use a stronger password and try again.");
-
         if (checkIfUserExists(user.getName()))
             throw new ApiException("User name already in use. Please use a different name and try again.");
 
@@ -58,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean checkIfUserExists(String name) {
-        return userRepository.findByName(name) != null;
+        return userRepository.findByName(name).isPresent();
     }
 
 }
