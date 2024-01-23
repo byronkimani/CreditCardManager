@@ -5,6 +5,7 @@ import com.byronkimani.CreditCardManger.model.Card;
 import com.byronkimani.CreditCardManger.model.User;
 import com.byronkimani.CreditCardManger.service.CardService;
 import com.byronkimani.CreditCardManger.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class UserResource {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<HttpResponse> createUser(@RequestBody User user) {
+    public ResponseEntity<HttpResponse> createUser(@RequestBody @Valid User user) {
         return ResponseEntity.created(getLocation(user.getId())).body(HttpResponse.builder()
                 .timeStamp(now().toString())
                 .data(of("result", userService.createUser(user)))
@@ -54,8 +55,9 @@ public class UserResource {
                 .build());
     }
 
-    @PutMapping
-    public ResponseEntity<HttpResponse> updateUser(@RequestBody User user) {
+    @PutMapping("/{id}")
+    public ResponseEntity<HttpResponse> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+        user.setId(id);
         userService.updateUser(user);
 
         return ResponseEntity.ok(HttpResponse.builder()

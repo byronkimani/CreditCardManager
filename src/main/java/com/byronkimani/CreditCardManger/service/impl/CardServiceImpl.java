@@ -22,10 +22,6 @@ public class CardServiceImpl implements CardService {
         return cardRepository.save(card);
     }
 
-    @Override
-    public List<Card> getAllCards() {
-        return cardRepository.findAll();
-    }
 
     @Override
     public Card getCardById(Long id) {

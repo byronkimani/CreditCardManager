@@ -34,7 +34,6 @@ public class AccountServiceImpl implements AccountService {
 
         newAccount.setIban(account.getIban());
         newAccount.setIban(account.getBicSwift());
-        newAccount.setCards(account.getCards());
 
         accountRepository.save(newAccount);
     }
