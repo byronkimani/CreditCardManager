@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  app:
+    image: openjdk:17-jdk-slim
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/creditcardmanager
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+    ports:
+      - "8080:8080"
+    container_name: my_spring_app
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ./app:/app
+    command: ["java", "-jar", "/app/app.jar"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d creditcardmanager"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  db:
+    image: postgres:13
+    container_name: my_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: mydatabase
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d mydatabase"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

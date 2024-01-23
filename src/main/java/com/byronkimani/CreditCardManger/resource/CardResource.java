@@ -3,6 +3,7 @@ package com.byronkimani.CreditCardManger.resource;
 import com.byronkimani.CreditCardManger.domain.HttpResponse;
 import com.byronkimani.CreditCardManger.model.Account;
 import com.byronkimani.CreditCardManger.model.Card;
+import com.byronkimani.CreditCardManger.repository.AccountRepository;
 import com.byronkimani.CreditCardManger.service.AccountService;
 import com.byronkimani.CreditCardManger.service.CardService;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,15 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 @RequiredArgsConstructor
 public class CardResource {
     private final CardService cardService;
+    private final AccountRepository accountRepository;
 
-    @PostMapping
-    public ResponseEntity<HttpResponse> createCard(@RequestBody Card card) {
+    @PostMapping("/{id}")
+    public ResponseEntity<HttpResponse> createCard(@PathVariable("id") Long accountId,@RequestBody Card card) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found with ID: " + accountId));
+
+        card.setAccount(account);
+
         return ResponseEntity.created(getLocation(card.getId())).body(HttpResponse.builder()
                 .timeStamp(now().toString())
                 .data(of("result", cardService.createCard(card)))

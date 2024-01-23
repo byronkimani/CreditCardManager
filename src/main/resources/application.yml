@@ -1,20 +1,7 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/creditcardmanager
-    password: hbgvfc45
-    username: postgres
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        globally_quoted_identifiers: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format-sql: true
-  sql:
-    init:
-      mode: always
-      continue-on-error: false
+  profiles:
+    active: @spring.profiles.active@
+
+application:
+  title: Credit Card Manager
+  version: 1.0
