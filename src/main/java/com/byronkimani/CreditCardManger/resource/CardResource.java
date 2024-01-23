@@ -35,16 +35,16 @@ public class CardResource {
                 .build());
     }
 
-    @GetMapping
-    public ResponseEntity<HttpResponse> getAllCards() {
-        return ResponseEntity.ok(HttpResponse.builder()
-                .timeStamp(now().toString())
-                .data(of("result", cardService.getAllCards()))
-                .message("Cards successfully retrieved")
-                .httpStatus(OK)
-                .statusCode(OK.value())
-                .build());
-    }
+//    @GetMapping
+//    public ResponseEntity<HttpResponse> getAllCards() {
+//        return ResponseEntity.ok(HttpResponse.builder()
+//                .timeStamp(now().toString())
+//                .data(of("result", cardService.getAllCards()))
+//                .message("Cards successfully retrieved")
+//                .httpStatus(OK)
+//                .statusCode(OK.value())
+//                .build());
+//    }
 
     @GetMapping
     public ResponseEntity<HttpResponse> getCard(@PathVariable("id") Long id) {

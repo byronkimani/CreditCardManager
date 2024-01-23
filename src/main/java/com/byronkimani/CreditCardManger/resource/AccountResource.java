@@ -32,16 +32,16 @@ public class AccountResource {
                 .build());
     }
 
-    @GetMapping
-    public ResponseEntity<HttpResponse> getAllAccounts() {
-        return ResponseEntity.ok(HttpResponse.builder()
-                .timeStamp(now().toString())
-                .data(of("result", accountService.getAllAccounts()))
-                .message("Accounts successfully retrieved")
-                .httpStatus(OK)
-                .statusCode(OK.value())
-                .build());
-    }
+//    @GetMapping
+//    public ResponseEntity<HttpResponse> getAllAccounts() {
+//        return ResponseEntity.ok(HttpResponse.builder()
+//                .timeStamp(now().toString())
+//                .data(of("result", accountService.getAllAccounts()))
+//                .message("Accounts successfully retrieved")
+//                .httpStatus(OK)
+//                .statusCode(OK.value())
+//                .build());
+//    }
 
     @GetMapping
     public ResponseEntity<HttpResponse> getAccount(@PathVariable("id") Long id) {
