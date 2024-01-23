@@ -2,6 +2,8 @@ package com.byronkimani.CreditCardManger.resource;
 
 import com.byronkimani.CreditCardManger.domain.HttpResponse;
 import com.byronkimani.CreditCardManger.model.Account;
+import com.byronkimani.CreditCardManger.model.User;
+import com.byronkimani.CreditCardManger.repository.UserRepository;
 import com.byronkimani.CreditCardManger.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,18 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 @RequiredArgsConstructor
 public class AccountResource {
     private final AccountService accountService;
+    private final UserRepository userRepository;
 
-    @PostMapping
-    public ResponseEntity<HttpResponse> createAccount(@RequestBody Account account) {
+    @PostMapping("/{userId}")
+    public ResponseEntity<HttpResponse> createAccount(@PathVariable("userId") Long userId,@RequestBody Account account) {
+
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        account.setUser(user);
+
+
         return ResponseEntity.created(getLocation(account.getId())).body(HttpResponse.builder()
                 .timeStamp(now().toString())
                 .data(of("result", accountService.createAccount(account)))
@@ -31,7 +42,6 @@ public class AccountResource {
                 .statusCode(CREATED.value())
                 .build());
     }
-
 //    @GetMapping
 //    public ResponseEntity<HttpResponse> getAllAccounts() {
 //        return ResponseEntity.ok(HttpResponse.builder()
@@ -43,8 +53,9 @@ public class AccountResource {
 //                .build());
 //    }
 
-    @GetMapping
-    public ResponseEntity<HttpResponse> getAccount(@PathVariable("id") Long id) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<HttpResponse> getAccount(@PathVariable("userId") Long id) {
+//        TODO:
         return ResponseEntity.ok(HttpResponse.builder()
                 .timeStamp(now().toString())
                 .data(of("result", accountService.getAccountById(id)))
@@ -66,7 +77,7 @@ public class AccountResource {
                 .build());
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpResponse> deleteAccount(@PathVariable("id") Long id) {
         return ResponseEntity.ok(HttpResponse.builder()
                 .timeStamp(now().toString())
