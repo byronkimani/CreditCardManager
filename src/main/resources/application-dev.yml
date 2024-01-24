@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/creditcardmanager
-    password: hbgvfc45
+    password: password
     username: postgres
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
