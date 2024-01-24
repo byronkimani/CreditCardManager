@@ -11,12 +11,14 @@ services:
     ports:
       - "8080:8080"
     container_name: my_spring_app
-    restart: always
     depends_on:
       - db
     volumes:
       - ./app:/app
-    command: ["java", "-jar", "/app/app.jar"]
+    # command: ["java", "/src/mainjava/com/byronkimani/CreditCardManger/Application.java"]
+    # command:
+    #   ["java", "-cp", "/app", "com.byronkimani.CreditCardManger.Application.java"]
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d creditcardmanager"]
       interval: 30s
@@ -25,7 +27,6 @@ services:
   db:
     image: postgres:13
     container_name: my_postgres
-    restart: always
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}

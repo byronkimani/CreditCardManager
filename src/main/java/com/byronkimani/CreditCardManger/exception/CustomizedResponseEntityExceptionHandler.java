@@ -1,5 +1,6 @@
 package com.byronkimani.CreditCardManger.exception;
 
+
 import com.byronkimani.CreditCardManger.model.ErrorDetails;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
